@@ -1,0 +1,29 @@
+{
+  "name": "ncku-course-crawler",
+  "version": "1.0.0",
+  "description": "a crawler",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccns/ncku-course-crawler.git"
+  },
+  "keywords": [
+    "ncku",
+    "crawler",
+    "course"
+  ],
+  "author": "Daniel Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ccns/ncku-course-crawler/issues"
+  },
+  "homepage": "https://github.com/ccns/ncku-course-crawler#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "mongodb": "^2.2.21",
+    "request": "^2.79.0"
+  }
+}
