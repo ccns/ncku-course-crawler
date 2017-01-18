@@ -6,9 +6,9 @@ home_url = "http://localhost/102.html"
 var qry_url = "http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=";
 
 function getDeptNo() {
-  return new Promise(function(resolve, reject){
-    request(home_url, function(err, res, body) {
-      if(!err && res.statusCode == 200) {
+  return new Promise((resolve, reject) => {
+    request(home_url, (err, res, body) => {
+      if (!err && res.statusCode == 200) {
         var $ = cheerio.load(body);
         var result = [];
         var lis = $("#dept_list li");
@@ -20,7 +20,9 @@ function getDeptNo() {
           var depts = [];
           for (var j=0; j<as.length; j++) {
             var a = as[j];
-            depts.push($(a).attr("href").split("=")[1]);
+            var dept_no = $(a).attr("href").split("=")[1];
+            var dept_name = $(a).text().replace(/\s+/g,"").replace("）",")");
+            depts.push({dept_no: dept_no, dept_name: dept_name});
           }
           result.push({title: title, depts: depts});
         }
@@ -33,8 +35,8 @@ function getDeptNo() {
 }
 
 function getCourses(dept_no) {
-  return new Promise(function(resolve, reject) {
-    request(qry_url+dept_no, function(err, res, body) {
+  return new Promise((resolve, reject) => {
+    request(qry_url+dept_no, (err, res, body) => {
       if(!err && res.statusCode == 200) {
         var $ = cheerio.load(body);
         var trs = $("tr[class^=course_]");

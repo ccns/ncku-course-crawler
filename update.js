@@ -3,54 +3,78 @@ var MongoClient = require("mongodb").MongoClient
 var assert = require("assert");
 var url = "mongodb://crawler:ccnsccns@ds111798.mlab.com:11798/ncku-course-db";
 
-var promiseFor = Promise.method(function(value, condition, action) {
-    if (!condition(value)) return value;
-    return action(value).then(promiseFor.bind(null, condition, action));
-});
+function updateDeptList() {
+  function* run() {
+    var colleges = yield c.getDeptNo();
+    var db = yield MongoClient.connect(url);
 
-function* updateCollegeList() {
-  var colleges = yield c.getDeptNo();
-  var db = yield MongoClient.connect(url);
+    var collection = db.collection('depts');
 
-  var collection = db.collection('colleges');
+    yield collection.drop();
+    var result = yield collection.insertMany(colleges);
+    assert.equal(12, result.result.n);
+    assert.equal(12, result.ops.length);
+    console.log("Inserted 12 documents into the collection");
+    db.close();
+  }
 
-  var result = yield collection.insertMany(colleges);
-  assert.equal(12, result.result.n);
-  assert.equal(12, result.ops.length);
-  console.log("Inserted 12 documents into the collection");
-  db.close();
+  var gen = run();
+  function go(result){
+    if(result.done) return;
+    result.value.then(function(r){
+      go(gen.next(r));
+    }).catch(function(err){
+      console.log(err);
+      return;
+    });
+  }
+  go(gen.next());
 }
 
-function* updateCoursesList(colleges) {
-  for (let i=0; i<colleges.length; i++) {
-    let depts = colleges[i];
-    let dept_no = depts.depts;
-    promiseFor( 0, (j)=>j<dept_no.length, (j,courses)=> {
-      c.getCourses(dept_no[j]).then(function(courses) {
-        if (courses<0) {
-          console.log(dept_no[j]+": timeout");
-        } else {
-          console.log(dept_no[j]+": "+courses.length);
-          if (courses.length > 0) {
-            MongoClient.connect(url).then(function(db) {
-              assert.equal(null, err);
-              var collection = db.collection('courses');
-              return collection.insertMany({
-                dept: dept_no[j],
-                courses: courses
-              })
-            }).then(function(result) {
-              assert.equal(err, null);
-              assert.equal(courses.length, result.result.n);
-              assert.equal(courses.length, result.ops.length);
-              console.log("Inserted "+courses.length+" to dept_no[j]");
-              db.close();
-            }).fail(function(err) {
-              console.log(err);
-            });
-          }
-        }
-      });
-    })
+function updateCourseList(dept) {
+  function* run(dept) {
+    var dept_no = dept.dept_no
+    var courses = yield c.getCourses(dept_no);
+
+    if (courses<0) {
+      yield new Error(dept_no+": timeout");
+    } else {
+      console.log(dept_no+": "+courses.length);
+      if (courses.length > 0) {
+        var db = yield MongoClient.connect(url);
+        var collection = db.collection('courses');
+        var result = yield collection.update({"dept": dept_no}, {
+          dept: dept_no,
+          courses: courses
+        }, {upsert: true});
+        console.log(dept_no + " updated.");
+        db.close();
+      }
+    }
   }
+
+  let gen = run(dept);
+  function go(result) {
+    if(result.value instanceof Error) {
+      console.log(result.value);
+      console.log("Retry ...");
+      gen.return();
+      gen = run(dept);
+      go(gen.next());
+      return;
+    }
+    if(result.done) return;
+    result.value.then(function(r) {
+      go(gen.next(r));
+    }).catch(function(err) {
+      console.log(err);
+      return;
+    });
+  }
+  go(gen.next());
+}
+
+module.exports = {
+  updateDeptList: updateDeptList,
+  updateCourseList: updateCourseList
 }
