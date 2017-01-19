@@ -4,7 +4,10 @@ var MongoClient = require("mongodb").MongoClient
 var assert = require("assert");
 var url = "mongodb://crawler:ccnsccns@ds111798.mlab.com:11798/ncku-course-db";
 
+
 update.updateDeptList();
+
+sleep.sleep(3);
 
 function* run() {
   var db = yield MongoClient.connect(url);
@@ -12,7 +15,6 @@ function* run() {
   var colleges = yield collection.find({}).toArray();
   db.close();
 
-  sleep.sleep(1);
   for (let i=0; i<colleges.length; i++) {
     let depts = colleges[i].depts;
     for (let j=0; j<depts.length; j++) {

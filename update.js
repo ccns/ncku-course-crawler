@@ -7,9 +7,7 @@ function updateDeptList() {
   function* run() {
     var colleges = yield c.getDeptNo();
     var db = yield MongoClient.connect(url);
-
     var collection = db.collection('depts');
-
     yield collection.drop();
     var result = yield collection.insertMany(colleges);
     assert.equal(12, result.result.n);
@@ -43,10 +41,8 @@ function updateCourseList(dept) {
       if (courses.length > 0) {
         var db = yield MongoClient.connect(url);
         var collection = db.collection('courses');
-        var result = yield collection.update({"dept": dept_no}, {
-          dept: dept_no,
-          courses: courses
-        }, {upsert: true});
+        yield collection.deleteMany({"dept_no": dept_no});
+        var result = yield collection.insertMany(courses);
         console.log(dept_no + " updated.");
         db.close();
       }

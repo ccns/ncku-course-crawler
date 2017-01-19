@@ -49,6 +49,7 @@ function getCourses(dept_no) {
           var code = $(tds).eq(3).text();
           var classes = $(tds).eq(5).text().replace(/\s+/, "");
           var year = $(tds).eq(6).text();
+          var group = $(tds).eq(8).text();
           var name = $(tds).eq(10).text();
           var map_url = $(tds).eq(10).find("a").attr("href");
           map_url = typeof map_url === 'undefined'? '': map_url;
@@ -62,12 +63,18 @@ function getCourses(dept_no) {
           var memo = $(tds).eq(18).text();
           var moodle_url = "http://course-query.acad.ncku.edu.tw/qry/" + $(tds).eq(18).find("a").attr("href");
           var limit = $(tds).eq(19).text().replace(/\s+\//, "/");
+          if (i > 0 && dept_no === "") {
+            var last = result[result.length-1];
+            dept_no = last.dept_no;
+            course_no = last.course_no;
+          }
           result.push({
             dept_no: dept_no,
             course_no: course_no,
             code: code,
             classes: classes,
             year: year,
+            group: group,
             name: name,
             map_url: map_url,
             required: required,
