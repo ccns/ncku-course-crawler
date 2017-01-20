@@ -5,9 +5,8 @@ var assert = require("assert");
 var url = "mongodb://crawler:ccnsccns@ds111798.mlab.com:11798/ncku-course-db";
 
 
-update.updateDeptList();
-
-sleep.sleep(3);
+// update.updateDeptList();
+// sleep.sleep(3);
 
 function* run() {
   var db = yield MongoClient.connect(url);

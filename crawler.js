@@ -16,7 +16,7 @@ function getDeptNo() {
         for (var i=0; i<lis.length; i++) {
           var li = lis[i];
           var title = $(li).find(".theader").attr("title");
-          var as = $(li).find(".dept a");
+          var as = $(li).find(".dept a, .institute a");
           var depts = [];
           for (var j=0; j<as.length; j++) {
             var a = as[j];
