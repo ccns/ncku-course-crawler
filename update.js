@@ -1,14 +1,15 @@
 var c = require("./crawler.js");
 var MongoClient = require("mongodb").MongoClient
 var assert = require("assert");
-var url = "mongodb://crawler:ccnsccns@ds111798.mlab.com:11798/ncku-course-db";
+// var url = "mongodb://crawler:ccnsccns@ds111798.mlab.com:11798/ncku-course-db";
+var url = "mongodb://crawler:ccnsccns@localhost:27017/ncku-course-db";
 
 function updateDeptList() {
   function* run() {
     var colleges = yield c.getDeptNo();
     var db = yield MongoClient.connect(url);
     var collection = db.collection('depts');
-    yield collection.drop();
+    yield collection.deleteMany({});
     var result = yield collection.insertMany(colleges);
     assert.equal(12, result.result.n);
     assert.equal(12, result.ops.length);

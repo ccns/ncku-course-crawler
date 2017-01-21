@@ -3,7 +3,6 @@ var cheerio = require("cheerio");
 var fs = require("fs");
 
 var home_url = "http://course-query.acad.ncku.edu.tw/qry/index.php";
-home_url = "http://localhost/102.html"
 var qry_url = "http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=";
 
 function getDeptNo(html) {
@@ -106,6 +105,18 @@ function getCoursesUrl(dept_no) {
   })
 }
 
+function getDeptNoFile(dept_no) {
+  return new Promise((resolve, reject) => {
+    fs.readFile("pages/index.html", (err, body) => {
+      if(!err) {
+        resolve(getDeptNo(body));
+      } else {
+        resolve(-1);
+      }
+    });
+  })
+}
+
 function getCoursesFile(dept_no) {
   return new Promise((resolve, reject) => {
     fs.readFile("pages/depts/"+dept_no+".html", (err, body) => {
@@ -119,6 +130,6 @@ function getCoursesFile(dept_no) {
 }
 
 module.exports = {
-  getDeptNo: getDeptNoUrl,
+  getDeptNo: getDeptNoFile,
   getCourses: getCoursesFile
 }
