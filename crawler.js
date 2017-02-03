@@ -1,5 +1,6 @@
 var request = require("request");
 var cheerio = require("cheerio");
+var _ = require('lodash');
 var fs = require("fs");
 
 var home_url = "http://course-query.acad.ncku.edu.tw/qry/index.php";
@@ -47,7 +48,7 @@ function getCourses(html) {
     var teacher = $(tds).eq(13).text();
     var selected = $(tds).eq(14).text();
     var remain = $(tds).eq(15).text();
-    var time = $(tds).eq(16).text();
+    var time = timeFormatter($(tds).eq(16).text());
     var classroom = $(tds).eq(17).text().replace(/\s+/, " ");
     var memo = $(tds).eq(18).text();
     var moodle_url = "http://course-query.acad.ncku.edu.tw/qry/" + $(tds).eq(18).find("a").attr("href");
@@ -127,6 +128,52 @@ function getCoursesFile(dept_no) {
       }
     });
   })
+}
+
+function timeFormatter(origin) {
+  if(origin == "未定") return "";
+  var origins = origin.split(/(?=\[)/g);
+  var result = [];
+  for (ori in origins) {
+    ori = origins[ori];
+    var day = weekdays(ori.substring(1,2));
+    var time = ori.substr(3,ori.length).split("~").map(classtimes).join("-");
+    result.push(day+time);
+  }
+  return result.join();
+}
+
+function weekdays(s) {
+  switch(s) {
+    case '1': return 'M';
+    case '2': return 'T';
+    case '3': return 'W';
+    case '4': return 'R';
+    case '5': return 'F';
+    case '6': return 'S';
+    case '7': return 'U';
+  }
+}
+
+function classtimes(s) {
+  switch(s) {
+    case '0': return 0;
+    case '1': return 1;
+    case '2': return 2;
+    case '3': return 3;
+    case '4': return 4;
+    case 'N': return 5;
+    case '5': return 6;
+    case '6': return 7;
+    case '7': return 8;
+    case '8': return 9;
+    case '9': return 10;
+    case 'A': return 11;
+    case 'B': return 12;
+    case 'C': return 13;
+    case 'D': return 14;
+    case 'E': return 15;
+  }
 }
 
 module.exports = {
