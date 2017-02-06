@@ -132,13 +132,17 @@ function getCoursesFile(dept_no) {
 
 function timeFormatter(origin) {
   if(origin == "未定") return "";
-  var origins = origin.split(/(?=\[)/g);
+  var times = origin.split(/(?=\[)/g);
   var result = [];
-  for (ori in origins) {
-    ori = origins[ori];
-    var day = weekdays(ori.substring(1,2));
-    var time = ori.substr(3,ori.length).split("~").map(classtimes).join("-");
-    result.push(day+time);
+  for (t in times) {
+    time = times[t];
+    var day = weekdays(time.substring(1,2));
+    var ts = time.substr(3,time.length).split("~").map(t => parseInt(classtimes(t)));
+    if (ts.length > 1)
+      for (var i = ts[0]; i <= ts[1]; i++)
+        result.push(day+i);
+    else
+      result.push(day+ts[0]);
   }
   return result.join();
 }
