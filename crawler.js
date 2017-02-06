@@ -108,7 +108,7 @@ function getCoursesUrl(dept_no) {
 
 function getDeptNoFile(dept_no) {
   return new Promise((resolve, reject) => {
-    fs.readFile("pages/index.html", (err, body) => {
+    fs.readFile(__dirname+"/pages/index.html", (err, body) => {
       if(!err) {
         resolve(getDeptNo(body));
       } else {
@@ -120,7 +120,7 @@ function getDeptNoFile(dept_no) {
 
 function getCoursesFile(dept_no) {
   return new Promise((resolve, reject) => {
-    fs.readFile("pages/depts/"+dept_no+".html", (err, body) => {
+    fs.readFile(__dirname+"/pages/depts/"+dept_no+".html", (err, body) => {
       if(!err) {
         resolve(getCourses(body));
       } else {
