@@ -1,5 +1,7 @@
 #!/bin/bash
 
+TIC=$(date +%s)
+
 cd $(dirname "$0")
 BASEDIR=$(pwd)
 LOGDIR=${1:-$BASEDIR/log}
@@ -22,3 +24,6 @@ if [ $PIPESTATUS -eq 0 ]; then
 else
   echo "Kill mongo-connector failed." | $BASEDIR/predate.sh >> $LOGFILE
 fi
+
+TOC=$((`date +%s`-TIC))
+echo "Total excution time: $TOC" | $BASEDIR/predate.sh >> $LOGFILE
