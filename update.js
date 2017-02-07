@@ -39,7 +39,7 @@ function updateCourseList(dept) {
     if (courses<0) {
       yield new Error(dept_no+": timeout");
     } else {
-      console.log(dept_no+": "+courses.length);
+      // console.log(dept_no+": "+courses.length);
       if (courses.length > 0) {
         var db = yield MongoClient.connect(url);
         var collection = db.collection('courses');
@@ -84,6 +84,7 @@ function update(updateDept) {
     var colleges = yield collection.find({}).toArray();
     db.close();
 
+    console.log("Start to update course list ...")
     for (let i=0; i<colleges.length; i++) {
       let depts = colleges[i].depts;
       for (let j=0; j<depts.length; j++) {

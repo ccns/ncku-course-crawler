@@ -8,5 +8,5 @@ pages/depts/*
 pages/retry.json
 pages/index.html
 
-mongo-connector.log
-oplog.timestamp
+*.log
+*.timestamp

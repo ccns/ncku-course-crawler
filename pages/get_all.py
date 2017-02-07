@@ -18,7 +18,6 @@ lock = threading.Lock()
 def download(dept):
     global depts
     url = "http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + dept
-    print("Request sent: "+dept)
 
     req = requests.Session()
     res = req.get(url)
@@ -36,9 +35,19 @@ def download(dept):
     json.dump(depts, f)
     f.close()
     print(dept+".html updated. Remain: "+str(len(depts)))
-    if(len(depts)==0):
-        print("All done.")
     lock.release()
 
+threads = []
 for dept in depts:
-    threading.Thread(target=download, args=(dept,)).start()
+    t = threading.Thread(target=download, args=(dept,))
+    threads.append(t)
+    print("Thread "+dept+" established.")
+
+for t in threads:
+    t.start()
+
+for t in threads:
+    t.join()
+
+if(len(depts)==0):
+    print("All done.")
