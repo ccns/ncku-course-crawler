@@ -2,7 +2,8 @@ var sleep = require("sleep");
 var update = require("./update.js");
 var MongoClient = require("mongodb").MongoClient
 var assert = require("assert");
-var url = "mongodb://crawler:ccnsccns@localhost:27017/ncku-course-db";
+var config = require("config");
+var url = config.get("mongo.url");
 
 
 // update.updateDeptList();
