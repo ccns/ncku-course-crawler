@@ -7,3 +7,6 @@ node_modules
 pages/depts/*
 pages/retry.json
 pages/index.html
+
+mongo-connector.log
+oplog.timestamp
