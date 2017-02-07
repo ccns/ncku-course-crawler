@@ -4,7 +4,7 @@
   "description": "a crawler",
   "main": "run.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node run.js"
   },
   "repository": {
     "type": "git",
