@@ -39,7 +39,7 @@ function updateCourseList(dept) {
     if (courses<0) {
       yield new Error(dept_no+": timeout");
     } else {
-      // console.log(dept_no+": "+courses.length);
+      console.log(dept_no+": "+courses.length);
       if (courses.length > 0) {
         var db = yield MongoClient.connect(url);
         var collection = db.collection('courses');
@@ -106,4 +106,8 @@ function update(updateDept) {
   go(gen.next());
 }
 
-module.exports = update
+module.exports = {
+  update: update,
+  updateDeptList: updateDeptList,
+  updateCourseList: updateCourseList
+}

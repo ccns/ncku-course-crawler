@@ -4,7 +4,8 @@
   "description": "a crawler",
   "main": "run.js",
   "scripts": {
-    "start": "node run.js"
+    "start": "node run.js",
+    "updateDept": "node -e 'require(\"./update.js\").updateDeptList()'"
   },
   "repository": {
     "type": "git",
