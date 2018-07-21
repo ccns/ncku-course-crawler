@@ -3,6 +3,10 @@ import hashlib
 import json
 import threading
 import sys
+import os
+
+if not os.path.exists('depts'):
+    os.mkdir('depts')
 
 deptFile = "depts.json"
 if(len(sys.argv)>1 and sys.argv[1] == "retry"):
@@ -25,7 +29,7 @@ def download(dept):
 
     t = res.text
 
-    f = open("depts/"+dept+".html", "w")
+    f = open("depts/"+dept+".html", "wb")
     f.write(t.encode("utf8"))
     f.close()
 
