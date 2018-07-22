@@ -22,7 +22,7 @@ function getDeptNo(html) {
             var dept_name = $(a).text().replace(/\s+/g,"").replace("）",")")
             depts.push({dept_no: dept_no, dept_name: dept_name})
         }
-        result.push({title: title, depts: depts})
+        result.push({title, depts})
     }
     return result
 }
@@ -34,6 +34,7 @@ function getCourses(html) {
     for (var i=0; i<trs.length; i++) {
         var tr = trs[i]
         var tds = $(tr).find("td")
+        var dept_name = $(tds).eq(0).text().replace(/\s+/, "")
         var dept_no = $(tds).eq(1).text()
         var course_no = $(tds).eq(2).text()
         var code = $(tds).eq(3).text()
@@ -59,24 +60,25 @@ function getCourses(html) {
             course_no = last.course_no
         }
         result.push({
-            dept_no: dept_no,
-            course_no: course_no,
-            code: code,
-            classes: classes,
-            year: year,
-            group: group,
-            name: name,
-            map_url: map_url,
-            required: required,
-            credit: credit,
-            teacher: teacher,
-            selected: selected,
-            remain: remain,
-            time: time,
-            classroom: classroom,
-            memo: memo,
-            moodle_url: moodle_url,
-            limit: limit
+            dept_name,
+            dept_no,
+            course_no,
+            code,
+            classes,
+            year,
+            group,
+            name,
+            map_url,
+            required,
+            credit,
+            teacher,
+            selected,
+            remain,
+            time,
+            classroom,
+            memo,
+            moodle_url,
+            limit
         })
     }
     return result
