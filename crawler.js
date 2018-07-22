@@ -31,10 +31,10 @@ function getCourses(html) {
     var $ = cheerio.load(html)
     var trs = $("tr[class^=course_]")
     var result = []
+    var dept_name = $($(trs[0]).find("td")).eq(0).text().replace(/\s+/, "")
     for (var i=0; i<trs.length; i++) {
         var tr = trs[i]
         var tds = $(tr).find("td")
-        var dept_name = $(tds).eq(0).text().replace(/\s+/, "")
         var dept_no = $(tds).eq(1).text()
         var course_no = $(tds).eq(2).text()
         var code = $(tds).eq(3).text()
