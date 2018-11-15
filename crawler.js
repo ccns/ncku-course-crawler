@@ -1,37 +1,40 @@
-var axios = require("axios")
-var cheerio = require("cheerio")
-var _ = require('lodash')
-var fs = require("fs")
+const axios = require("axios")
+const cheerio = require("cheerio")
+const _ = require('lodash')
+const fs = require("fs")
 
-var home_url = "http://course-query.acad.ncku.edu.tw/qry/index.php"
-var qry_url = "http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no="
+const home_url = "http://course-query.acad.ncku.edu.tw/qry/index.php"
+const qry_url = "http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no="
 
 function getDeptNo(html) {
-    var $ = cheerio.load(html)
-    var result = []
-    var lis = $("#dept_list li")
-    var i = 0
-    for (var i=0; i<lis.length; i++) {
-        var li = lis[i]
-        var title = $(li).find(".theader").attr("title")
-        var as = $(li).find(".dept a, .institute a")
-        var depts = []
+    const $ = cheerio.load(html);
+    const lis = $("#dept_list li");
+
+    var result = [];
+
+    for (var i = 0; i < lis.length; i++) {
+        var li = lis[i];
+        var title = $(li).find(".theader").attr("title");
+        var as = $(li).find(".dept a, .institute a");
+
+        var depts = [];
         for (var j=0; j<as.length; j++) {
-            var a = as[j]
-            var dept_no = $(a).attr("href").split("=")[1]
-            var dept_name = $(a).text().replace(/\s+/g,"").replace("）",")")
-            depts.push({dept_no: dept_no, dept_name: dept_name})
+            var a = as[j];
+            var dept_no = $(a).attr("href").split("=")[1];
+            var dept_name = $(a).text().replace(/\s+/g,"").replace("）",")");
+            depts.push({dept_no: dept_no, dept_name: dept_name});
         }
-        result.push({title, depts})
+        result.push({title, depts});
     }
-    return result
+    return result;
 }
 
 function getCourses(html) {
     var $ = cheerio.load(html)
     var trs = $("tr[class^=course_]")
-    var result = []
     var dept_name = $($(trs[0]).find("td")).eq(0).text().replace(/\s+/, "")
+
+    var result = []
     for (var i=0; i<trs.length; i++) {
         var tr = trs[i]
         var tds = $(tr).find("td")
