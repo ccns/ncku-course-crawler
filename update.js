@@ -1,4 +1,4 @@
-var c = require("./crawler.js");
+var c = require("./lib/crawler.js");
 var MongoClient = require("mongodb").MongoClient
 var assert = require("assert");
 var config = require("config");
