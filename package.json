@@ -24,7 +24,7 @@
   "homepage": "https://github.com/ccns/ncku-course-crawler#readme",
   "dependencies": {
     "ajv": "^6.12.6",
-    "axios": "^0.21.1",
+    "axios": "^0.33.0",
     "cheerio": "^0.22.0",
     "config": "^1.31.0",
     "css-what": "^2.1.3",
